@@ -3,7 +3,7 @@
 use App\Http\Controllers\ProductController;
 use Illuminate\Routing\Route;
 
-Route::prefix('v1')->group(function () {
+
     // Retrieve all products
     Route::get('/products', [ProductController::class, 'index']);
 
@@ -18,4 +18,3 @@ Route::prefix('v1')->group(function () {
 
     // Delete a specific product
     Route::delete('/products/{product}', [ProductController::class, 'destroy']);
-});
