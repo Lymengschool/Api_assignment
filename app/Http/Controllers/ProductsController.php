@@ -2,65 +2,74 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreProductsRequest;
-use App\Http\Requests\UpdateProductsRequest;
 use App\Models\Products;
+use Illuminate\Http\Request;
 
-class ProductsController extends Controller
+class ProductController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    // Display a listing of the products.
     public function index()
     {
-        //
+        $products = Products::all();
+        return view('products.index', compact('products'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
+    // Show the form for creating a new product.
     public function create()
     {
-        //
+        return view('products.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(StoreProductsRequest $request)
+    // Store a newly created product in storage.
+    public function store(Request $request)
     {
-        //
+        $request->validate([
+            'name' => 'required',
+            'price' => 'required|numeric',
+            'categoryId' => 'required|exists:categories,id',
+            'supplierId' => 'required|exists:suppliers,id',
+        ]);
+
+        Products::create($request->all());
+
+        return redirect()->route('products.index')
+                        ->with('success','Product created successfully.');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Products $products)
+    // Display the specified product.
+    public function show(Products $product)
     {
-        //
+        return view('products.show',compact('product'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Products $products)
+    // Show the form for editing the specified product.
+    public function edit(Products $product)
     {
-        //
+        return view('products.edit',compact('product'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(UpdateProductsRequest $request, Products $products)
+    // Update the specified product in storage.
+    public function update(Request $request, Products $product)
     {
-        //
+        $request->validate([
+            'name' => 'required',
+            'price' => 'required|numeric',
+            'categoryId' => 'required|exists:categories,id',
+            'supplierId' => 'required|exists:suppliers,id',
+        ]);
+
+        $product->update($request->all());
+
+        return redirect()->route('products.index')
+                        ->with('success','Product updated successfully');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Products $products)
+    // Remove the specified product from storage.
+    public function destroy(Products $product)
     {
-        //
+        $product->delete();
+
+        return redirect()->route('products.index')
+                        ->with('success','Product deleted successfully');
     }
 }
