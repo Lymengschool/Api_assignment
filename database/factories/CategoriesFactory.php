@@ -17,7 +17,9 @@ class CategoriesFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'name' => $this->faker->word,
+            'contactName' => $this->faker->name,
+            'phoneNumber' => $this->faker->phoneNumber,
         ];
     }
 }
